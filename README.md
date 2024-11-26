@@ -1,6 +1,6 @@
-# **Speech Emotion Recognition **
+# Speech Emotion Recognition 
 
-## **Overview**
+## Overview
 This project focuses on building a Speech Emotion Recognition (SER) system that identifies the emotional state of a speaker from audio input. 
 By leveraging machine learning and audio processing techniques, the system classifies emotions such as:
 
