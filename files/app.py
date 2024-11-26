@@ -5,6 +5,7 @@ import speech_recognition as sr
 import numpy as np
 import librosa
 import joblib
+import sqlite3
 
 # Set up paths
 UPLOAD_FOLDER = 'uploads'
@@ -30,6 +31,21 @@ def extract_features(file_path):
     return np.mean(mfccs, axis=1)
 
 
+# Function to save the file information and prediction to the database
+def save_to_db(file_name, file_path, predicted_emotion):
+    conn = sqlite3.connect('uploads.db')
+    cursor = conn.cursor()
+
+    # Insert file and prediction into the database
+    cursor.execute('''
+        INSERT INTO predictions (file_name, file_path, predicted_emotion)
+        VALUES (?, ?, ?)
+    ''', (file_name, file_path, predicted_emotion))
+
+    conn.commit()
+    conn.close()
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -53,6 +69,9 @@ def predict():
         features = extract_features(file_path)
         prediction = model.predict([features])
         predicted_emotion = prediction[0]  # Use the predicted label directly
+
+        # Save the file and prediction result to the database
+        save_to_db(filename, file_path, predicted_emotion)
 
         return jsonify({'emotion': predicted_emotion})
     else:
