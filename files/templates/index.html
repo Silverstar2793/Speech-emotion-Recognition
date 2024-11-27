@@ -4,32 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speech Emotion Detection</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1>Speech Emotion Detection</h1>
     <form id="uploadForm" action="/predict" method="POST" enctype="multipart/form-data">
         <label for="file">Upload an audio file:</label>
-        <input type="file" name="file" accept=".wav" required>
+        <input type="file" name="file" accept=".wav, .mp3" required>
         <button type="submit">Predict Emotion</button>
     </form>
 
-    <div id="emotionResult" style="margin-top: 20px;"></div>
+    <div id="emotionResult"></div>
 
     <script>
-        // This will handle the form submission and display the result on the same page.
         document.getElementById('uploadForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
+            e.preventDefault();
 
             const formData = new FormData(this);
 
-            // Use fetch to send the form data and get the response
             fetch('/predict', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
-                // Display the predicted emotion in the emotionResult div
                 if (data.emotion) {
                     document.getElementById('emotionResult').innerHTML = `Predicted Emotion: ${data.emotion}`;
                 } else {
