@@ -61,21 +61,28 @@ def predict():
         return jsonify({'error': 'No selected file'})
 
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
+        try:
+            # Secure and save the file
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
 
-        # Extract features from the audio file
-        features = extract_features(file_path)
-        prediction = model.predict([features])
-        predicted_emotion = prediction[0]  # Use the predicted label directly
+            # Extract features and make prediction
+            features = extract_features(file_path)
+            prediction = model.predict([features])  # Predict using the loaded model
+            predicted_emotion = prediction[0]
 
-        # Save the file and prediction result to the database
-        save_to_db(filename, file_path, predicted_emotion)
+            # Save the prediction to the database
+            save_to_db(filename, file_path, predicted_emotion)
 
-        return jsonify({'emotion': predicted_emotion})
+            # Return the prediction result to the frontend
+            return jsonify({'emotion': predicted_emotion})
+        except Exception as e:
+            print(f"Error during prediction: {e}")
+            return jsonify({'error': 'Prediction failed due to an internal error.'})
     else:
         return jsonify({'error': 'Invalid file format'})
+
 
 
 if __name__ == '__main__':
