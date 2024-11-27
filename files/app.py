@@ -39,13 +39,11 @@ init_db()
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 # Function to extract features from the audio file
 def extract_features(file_path):
     y, sr = librosa.load(file_path, sr=None)
     mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
     return np.mean(mfccs, axis=1)
-
 
 # Function to save the file information and prediction to the database
 def save_to_db(file_name, file_path, predicted_emotion):
@@ -58,11 +56,16 @@ def save_to_db(file_name, file_path, predicted_emotion):
     conn.commit()
     conn.close()
 
-
-@app.route('/')
+@app.route('/demo')
 def index():
     return render_template('index.html')
 
+@app.route('/')
+def about():
+    """
+    Render the About Us page.
+    """
+    return render_template('page2.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():

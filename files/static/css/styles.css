@@ -4,8 +4,8 @@ body {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #c18afb, #5693fd);
-    color: #fff;
+    background: linear-gradient(135deg, #e8d283, #5d98ff);
+    color: #ffffff;
 }
 
 /* Page Container */
@@ -18,10 +18,11 @@ body {
     padding: 20px;
     overflow: hidden;
     background-color: #78db97;
+    
 }
 
 /* Form Container */
-form {
+form{
     background: rgba(213, 198, 198, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -41,6 +42,11 @@ h1 {
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     text-align: center; /* Center the heading */
     margin-top: -40px; /* Move heading slightly above */
+}
+
+h2{
+    font-family:'Poppins', sans-serif;
+    font-style: normal;
 }
 
 /* Labels */
@@ -105,9 +111,9 @@ button[type="submit"]:hover {
 #emotionResult {
     font-size: 1.7rem; /* Slightly increased font size for emotion result */
     margin-top: 20px;
-    color: #ffeb3b;
+    color: #f2b84c;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family:'Poppins', sans-serif;
     text-align: center; /* Center text */
     width: 100%; /* Ensure full-width alignment */
     position: relative; /* Ensure it stays below the form */

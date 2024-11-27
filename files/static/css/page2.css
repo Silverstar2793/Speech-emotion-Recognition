@@ -1,0 +1,121 @@
+/* General Reset */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e8d283, #5d98ff);
+    color: #ffffff;
+}
+
+/* Page Container */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    overflow: hidden;
+    background-color: #78db97;
+    
+}
+
+/* Form Container */
+form {
+    background: rgba(213, 198, 198, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    padding: 60px; /* Increased padding */
+    width: 100%;
+    max-width: 700px; /* Increased max width */
+    text-align: center;
+}
+
+/* Headings */
+h1 {
+    font-size: 3.5rem; /* Further increased font size for heading */
+    color: #fff;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    text-align: center; /* Center the heading */
+    margin-top: -40px; /* Move heading slightly above */
+}
+
+h2{
+    font-family:'Poppins', sans-serif;
+    font-style: normal;
+}
+
+/* Labels */
+label {
+    font-size: 1.2rem; /* Increased font size for labels */
+    margin-bottom: 10px;
+    display: block;
+    color: #f0f0f0;
+}
+
+/* Input Fields */
+input[type="file"] {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 5px;
+    padding: 12px; /* Adjusted padding */
+    margin: 15px 0;
+    width: 100%;
+    color: #fff;
+    cursor: pointer;
+    outline: none;
+    font-size: 1.1rem; /* Increased font size for input */
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background-color: #2575fc;
+    border: none;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem; /* Increased font size for file upload button */
+    transition: background-color 0.3s ease;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #6a11cb;
+}
+
+/* Submit Button */
+button[type="submit"] {
+    background: #f12711;
+    background: linear-gradient(90deg, #f12711, #f5af19);
+    border: none;
+    border-radius: 5px;
+    padding: 14px 22px; /* Adjusted padding */
+    font-size: 1.2rem; /* Increased font size for submit button */
+    color: #fff;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* Emotion Result Display */
+#emotionResult {
+    font-size: 1.7rem; /* Slightly increased font size for emotion result */
+    margin-top: 20px;
+    color: #ffeb3b;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-family:'Poppins', sans-serif;
+    text-align: center; /* Center text */
+    width: 100%; /* Ensure full-width alignment */
+    position: relative; /* Ensure it stays below the form */
+    margin-top: 30px; /* Add more space below the form */
+}
