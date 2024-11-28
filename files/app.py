@@ -60,7 +60,7 @@ def save_to_db(file_name, file_path, predicted_emotion):
 def index():
     return render_template('index.html')
 
-@app.route('/aboutus')
+@app.route('/')
 def about():
     """
     Render the About Us page.
@@ -163,5 +163,7 @@ def audio_metadata():
             return jsonify({'error': f'Failed to process metadata: {e}'}), 500
     else:
         return jsonify({'error': 'Invalid file format'}), 400
+
+
 if __name__ == '__main__':
     app.run(debug=True)
