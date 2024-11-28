@@ -3,3 +3,4 @@ librosa
 scikit-learn
 speechrecognition
 pyaudio
+boto3
