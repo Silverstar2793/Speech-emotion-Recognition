@@ -11,15 +11,42 @@
     <h1>Speech Emotion Detection</h1>
     <form id="uploadForm" action="/predict" method="POST" enctype="multipart/form-data">
         <label for="file">Upload an audio file:</label>
-        <input type="file" name="file" accept=".wav, .mp3" required>
+        <input type="file" name="file" accept=".wav, .mp3" required id="audioFileInput">
+
+        <!-- Audio preview section -->
+        <div id="audioPreviewContainer" style="display:none;">
+            <h3>Audio Preview:</h3>
+            <audio id="audioPreview" controls>
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
         <button type="submit">Predict Emotion</button>
     </form>
 
     <div id="emotionResult"></div>
 
     <script>
+        // Handle audio file selection and show preview
+        document.getElementById('audioFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const audioUrl = URL.createObjectURL(file); // Create URL for the audio file
+                const audioPreview = document.getElementById('audioPreview');
+                const audioPreviewContainer = document.getElementById('audioPreviewContainer');
+
+                // Set the audio URL to the preview audio element
+                audioPreview.src = audioUrl;
+
+                // Show the audio preview container
+                audioPreviewContainer.style.display = 'block';
+            }
+        });
+
+        // Handle form submission for prediction
         document.getElementById('uploadForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            document.getElementById('emotionResult').innerHTML = 'Processing...';  // Show loading message
 
             const formData = new FormData(this);
 
