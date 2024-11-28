@@ -4,8 +4,8 @@ body {
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #e8d283, #5d98ff);
-    color: #ffffff;
+    background: linear-gradient(135deg, #c18afb, #5693fd);
+    color: #fff;
 }
 
 /* Page Container */
@@ -41,11 +41,6 @@ h1 {
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     text-align: center; /* Center the heading */
     margin-top: -40px; /* Move heading slightly above */
-}
-
-h2{
-    font-family:'Poppins', sans-serif;
-    font-style: normal;
 }
 
 /* Labels */
@@ -112,10 +107,9 @@ button[type="submit"]:hover {
     margin-top: 20px;
     color: #ffeb3b;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    font-family:'Poppins', sans-serif;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     text-align: center; /* Center text */
     width: 100%; /* Ensure full-width alignment */
     position: relative; /* Ensure it stays below the form */
     margin-top: 30px; /* Add more space below the form */
 }
-
