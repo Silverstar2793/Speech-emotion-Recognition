@@ -1,14 +1,19 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import os
 import sqlite3
+import librosa
+import numpy as np
+import pickle
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')  # Specify the folder containing index.html
 UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure the upload folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+MODEL_PATH = 'emotion_model.pkl'
+with open(MODEL_PATH, 'rb') as f:
+    model = pickle.load(f)
 
-# Database initialization
 def create_db():
     conn = sqlite3.connect('uploads.db')
     cursor = conn.cursor()
@@ -24,15 +29,20 @@ def create_db():
     conn.commit()
     conn.close()
 
-
-# Call this to ensure the database is created
 create_db()
 
+def extract_features(audio_path):
+    y, sr = librosa.load(audio_path, sr=16000)
+    mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
+    return np.mean(mfcc.T, axis=0)
+
+@app.route('/')
+def index():
+    return render_template('index.html')  # Serve the HTML file
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Check if file is in the request
         if 'file' not in request.files:
             return jsonify({"error": "No file part"}), 400
 
@@ -40,14 +50,12 @@ def predict():
         if file.filename == '':
             return jsonify({"error": "No selected file"}), 400
 
-        # Save file
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(file_path)
 
-        # Simplified emotion prediction logic (replace with your model later)
-        emotion = "happy"  # Placeholder for prediction
+        features = extract_features(file_path).reshape(1, -1)
+        emotion = model.predict(features)[0]
 
-        # Save to database
         conn = sqlite3.connect('uploads.db')
         cursor = conn.cursor()
         cursor.execute('INSERT INTO predictions (file_name, file_path, predicted_emotion) VALUES (?, ?, ?)',
@@ -59,7 +67,6 @@ def predict():
 
     except Exception as e:
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True)
