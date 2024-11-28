@@ -4,28 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speech Emotion Detection</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/static/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">
-            <img src="https://via.placeholder.com/200" alt="logo">
-            <p>TellTones</p>
-        </div>
-        <div class="nav-links">
-            <a href="/">About Us</a>
-            <a href="/demo">Demo</a>
-            <a href="#">Contact</a>
-        </div>
-    </nav>
-
-    <h1 id="speech">TellTones</h1>
-    <p>Click the button below and speak. The system will detect your emotion.</p>
-
+    <h1>Speech Emotion Detection</h1>
     <form id="uploadForm" action="/predict" method="POST" enctype="multipart/form-data">
-        <label for="file"><h2>Upload an audio file:</h2></label>
+        <label for="file">Upload an audio file:</label>
         <input type="file" name="file" accept=".wav, .mp3" required>
         <button type="submit">Predict Emotion</button>
     </form>
