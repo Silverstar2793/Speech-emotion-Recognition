@@ -60,7 +60,7 @@ def save_to_db(file_name, file_path, predicted_emotion):
 def index():
     return render_template('index.html')
 
-@app.route('/aboutus')
+@app.route('/')
 def about():
     """
     Render the About Us page.
