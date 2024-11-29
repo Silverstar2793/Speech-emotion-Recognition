@@ -38,6 +38,10 @@ def extract_features(audio_path):
 
 @app.route('/')
 def index():
+    return render_template('page2.html')  # Serve the HTML file
+
+@app.route('/demo')
+def demo():
     return render_template('index.html')  # Serve the HTML file
 
 @app.route('/predict', methods=['POST'])
