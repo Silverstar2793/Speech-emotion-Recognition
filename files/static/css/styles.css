@@ -204,9 +204,10 @@ button[type="submit"]:hover {
 #emotionResult {
     font-size: 1.7rem; /* Slightly increased font size for emotion result */
     margin-top: 20px;
-    color: #d69b58;
+    color: #ff4687;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     font-family:'Poppins',sans-serif;
+    font-weight: 100;
     text-align: center; /* Center text */
     width: 100%; /* Ensure full-width alignment */
     position: relative; /* Ensure it stays below the form */
