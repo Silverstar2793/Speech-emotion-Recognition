@@ -1,75 +1,113 @@
 from flask import Flask, request, jsonify, render_template
-import requests
+import os
+import sqlite3
+import librosa
+import numpy as np
+import pickle
 
-app = Flask(__name__, template_folder='templates')  # Use the 'templates' folder for HTML files
+# Initialize Flask app and configurations
+app = Flask(__name__, template_folder='templates')
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure upload directory exists
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Service URLs
-UPLOAD_SERVICE_URL = "http://localhost:5001/upload"
-EXTRACTION_SERVICE_URL = "http://localhost:5002/extract"
-PREDICTION_SERVICE_URL = "http://localhost:5003/predict"
-DATABASE_SERVICE_URL = "http://localhost:5004/store"
+# Load pre-trained model
+MODEL_PATH = 'emotion_model.pkl'
+if not os.path.exists(MODEL_PATH):
+    print(f"Error: Model file not found at {MODEL_PATH}")
+else:
+    with open(MODEL_PATH, 'rb') as f:
+        model = pickle.load(f)
+    print("Model loaded successfully.")
 
-# Routes to render the HTML pages
+# SQLite database setup
+def create_db():
+    """Create SQLite database and table if they do not exist."""
+    conn = sqlite3.connect('uploads.db')
+    cursor = conn.cursor()
+    cursor.execute(''' 
+        CREATE TABLE IF NOT EXISTS predictions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            file_name TEXT,
+            file_path TEXT,
+            predicted_emotion TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+create_db()
+
+# Feature extraction function
+def extract_features(audio_path):
+    """Extract MFCC features from an audio file."""
+    try:
+        y, sr = librosa.load(audio_path, sr=16000)  # Load audio with 16 kHz sample rate
+        mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)  # Compute MFCC features
+        return np.mean(mfcc.T, axis=0)  # Take mean of MFCC coefficients
+    except Exception as e:
+        print(f"Error extracting features from {audio_path}: {e}")
+        return None
+
+# Routes
 @app.route('/')
-def home():
-    return render_template('page2.html')  # Serve the original page2.html
+def index():
+    return render_template('page2.html')  # Serve the HTML file
 
 @app.route('/demo')
 def demo():
-    return render_template('index.html')  # Serve the original index.html
+    """Serve the HTML file for uploading files."""
+    return render_template('index.html')
 
-# Prediction route
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
-
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
-
+    """Handle audio file upload, feature extraction, prediction, and database storage."""
     try:
-        # Step 1: Upload file
-        upload_response = requests.post(UPLOAD_SERVICE_URL, files={'file': file})
-        if upload_response.status_code != 200:
-            return jsonify({"error": "Error in file upload"}), 500
-        
-        upload_data = upload_response.json()
-        file_path = upload_data.get("file_path")
-        file_name = file.filename
+        # Check if the request contains a file
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
 
-        # Step 2: Extract features
-        extract_response = requests.post(EXTRACTION_SERVICE_URL, json={"file_path": file_path})
-        if extract_response.status_code != 200:
-            return jsonify({"error": "Error in feature extraction"}), 500
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
 
-        features = extract_response.json().get("features")
+        # Save the uploaded file
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(file_path)
 
-        # Step 3: Predict emotion
-        predict_response = requests.post(PREDICTION_SERVICE_URL, json={"features": features})
-        if predict_response.status_code != 200:
-            return jsonify({"error": "Error in prediction"}), 500
+        # Extract features and predict emotion
+        features = extract_features(file_path)
+        if features is None:
+            return jsonify({"error": "Feature extraction failed"}), 400
 
-        emotion = predict_response.json().get("emotion")
+        features = features.reshape(1, -1)  # Reshape for model input
+        emotion = model.predict(features)[0]  # Predict emotion
 
-        # Step 4: Store in database
-        store_response = requests.post(DATABASE_SERVICE_URL, json={
-            "file_name": file_name,
-            "file_path": file_path,
-            "predicted_emotion": emotion
-        })
-        if store_response.status_code != 200:
-            return jsonify({"error": "Error storing prediction"}), 500
+        # Store prediction in SQLite database
+        try:
+            conn = sqlite3.connect('uploads.db')
+            cursor = conn.cursor()
+            cursor.execute(
+                'INSERT INTO predictions (file_name, file_path, predicted_emotion) VALUES (?, ?, ?)',
+                (file.filename, file_path, emotion)
+            )
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            print(f"Error inserting into the database: {e}")
+            return jsonify({"error": "Database insertion failed"}), 500
 
-        # Final response
+        # Respond with prediction results
         return jsonify({
-            "file_name": file_name,
+            "file_name": file.filename,
             "file_path": file_path,
             "predicted_emotion": emotion
         }), 200
 
     except Exception as e:
+        print(f"Error during prediction: {str(e)}")
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
+# Main block to run the app
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True)
