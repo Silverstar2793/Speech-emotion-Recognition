@@ -1,0 +1,195 @@
+/* Navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+    padding: 10px 20px;
+    z-index: 1000;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    width: 50px;
+    height: auto;
+}
+
+.nav-links a {
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #f5af19;
+}
+
+/* Body Background */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(to bottom right, #fff7d5, #b3d3ff);
+    color: #a2a2a2;
+}
+
+/* About Us Section */
+#about-us {
+    margin-top: 100px;
+    padding: 20px;
+    color: #333;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #f0f4f8; /* Eye-friendly light gray tone */
+    border-radius: 10px;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+    border-radius: 10px 10px 0 0;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.card-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.card-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #666;
+    margin: 10px 0;
+}
+
+/* Card General Styling */
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #f5f7fa; /* A more comfortable, softer background color */
+    border-radius: 10px;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+    border-radius: 10px 10px 0 0;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.card-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.card-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #666;
+    margin: 10px 0;
+}
+p.text-center {
+    color: #555;
+}
+/* Button Styling */
+.contact-button {
+    display: inline-block;
+    background-color: #9e3535; /* Initial button color */
+    color: #fff; /* Text color */
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.contact-button:hover {
+    background-color: rgb(255, 147, 147); /* Hover color */
+    transform: translateY(-2px); /* Slight lifting effect */
+    cursor: pointer;
+}
+
+/* Card and Button Spacing */
+.card-body .btn {
+    margin-top: 10px; /* Space between text and button */
+}
+
+#why-work-with-us {
+    background-color: #f9f9f9;
+    padding: 40px 0;
+    border-radius: 10px;
+}
+
+#why-work-with-us h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+#why-work-with-us p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+#why-work-with-us img {
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#footer {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    margin-top: auto; /* This ensures the footer stays at the bottom */
+    width: 100%;
+}
