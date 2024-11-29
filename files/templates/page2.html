@@ -4,35 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Speech Emotion Detection</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/aboutus.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Header -->
     <nav class="navbar">
         <div class="logo">
-            <img src="https://via.placeholder.com/200" alt="logo">
-            <p>TellTones</p>
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="logo">
+            <p>TellTones.</p>
         </div>
         <div class="nav-links">
             <a href="/">About Us</a>
             <a href="/demo">Demo</a>
-            <a href="#">Contact</a>
         </div>
     </nav>
 
-    <h1 id="speech">TellTones</h1>
-    <p><i>Aiding in understanding emotions!</i></p>
-    
-    <form id="Content">
-        <label for="file">
-            Our goal is to empower individuals, organizations, and communities with tools that understand emotions from voice.</p>
-            <p>Technologies we use:
-                <ul>
-                    <li>Librosa for audio feature extraction</li>
-                    <li>scikit-learn for building robust machine learning models</li>
-                    <li>SQLite for efficient data storage</li>
-                </ul>
-            </p></label>
-    </form>
+    <main>
+        <section id="about-us" class="container mt-5">
+            <h1 class="text-center">About Us!</h1>
+            <p class="text-center">
+                At TellTones, our mission is to bridge the gap between technology and human emotions.<br>
+                 We aim to provide innovative solutions for emotion detection through cutting-edge AI. 
+                 <br>Meet the incredible team behind TellTones!
+            </p>
+
+            <div class="row mt-4">
+                <!-- Team Member Cards -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <img src="/static/aanya.jpeg" alt="Aanya Tripathi" class="card-img-top">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Aanya Tripathi</h5>
+                            <p class="card-text">Visionary behind TellTones. Passionate about AI and emotional intelligence.</p>
+                            <a href="mailto:aanya.tripathi21@st.niituniversity.in" class="btn contact-button">Contact</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <img src="/static/megha.jpeg" alt="Megha Singh" class="card-img-top">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Megha Singh</h5>
+                            <p class="card-text">AI Developer and creative problem solver with a knack for innovation.</p>
+                            <a href="mailto:megha.singh21@st.niituniversity.in" class="btn contact-button">Contact</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <img src="/static/rajath.jpeg" alt="Rajath Nair" class="card-img-top">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Rajath Nair</h5>
+                            <p class="card-text">Backend specialist ensuring smooth integration and data flow.</p>
+                            <a href="mailto:rajath.nair21@st.niituniversity.in" class="btn contact-button">Contact</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <img src="/static/kathan.jpeg" alt="Kathan Soni" class="card-img-top">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Kathan Soni</h5>
+                            <p class="card-text">Frontend designer bringing intuitive and user-friendly designs to life.</p>
+                            <a href="mailto:kathan.soni21@st.niituniversity.in" class="btn contact-button">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+
+            <!-- Why Work With Us Section -->
+            <section id="why-work-with-us" class="container mt-5">
+                <h2 class="text-center mb-4">Why Work With Us?</h2>
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="text-center">
+                            At TellTones, we believe in delivering solutions that not only provide technology but also emotional intelligence, creating connections that go beyond mere data.<br>
+                            <br> Our team is composed of experienced AI specialists, backend developers, and frontend designers, all working together to create a seamless and meaningful user experience. 
+                            <br>We bring innovation, creativity, and precision to everything we do, ensuring that your business benefits from the latest advancements in AI-powered emotion detection.
+                        </p>
+                        <p class="text-center">
+                            What makes us different is our commitment to integrating empathy and technology. By focusing on understanding human emotions through AI, we’re able to create solutions that truly resonate with users.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="/static/happy-customers.png" alt="Happy Customers" class="img-fluid rounded">
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer" class="text-center mt-5 p-3">
+        <p>&copy; 2024 TellTones. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>
