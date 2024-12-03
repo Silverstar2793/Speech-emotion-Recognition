@@ -15,8 +15,14 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the repository code
-                    git url: "${REPO_URL}", branch: "${BRANCH}"
+                    echo 'Checking out the repository...'
+                    // Ensure Git is installed and configured properly
+                    sh 'git --version'
+
+                    // Checkout the repository code with fallback for authentication
+                    checkout([$class: 'GitSCM', 
+                              branches: [[name: "*/${BRANCH}"]],
+                              userRemoteConfigs: [[url: REPO_URL]]])
                 }
             }
         }
