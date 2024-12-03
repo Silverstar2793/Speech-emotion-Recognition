@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/user/repo.git'
+                git branch: 'main', url: 'https://github.com/Silverstar2793/Speech-emotion-Recognition.git'
             }
         }
         stage('Build') {
