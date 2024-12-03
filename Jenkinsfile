@@ -1,49 +1,68 @@
 pipeline {
     agent any
+
     environment {
-        DOCKER_IMAGE = 'silver2793/New_image'  // Replace with your Docker Hub repository
-        DOCKER_TAG = "${env.BUILD_ID}"  // Tagging the image with the Jenkins build ID
-        DOCKER_CREDENTIALS_ID = '95ff7395-d2a7-46ca-a1a2-7c79a79f9684'  // Jenkins credentials ID for Docker Hub
+        REPO_URL = 'https://github.com/Silverstar2793/Speech-emotion-Recognition.git'  // Replace with your Git repository URL
+        BRANCH = 'main'  // Replace with your branch name if different
     }
+
+    triggers {
+        // Polls the repository at regular intervals for changes
+        pollSCM('H/5 * * * *')  // Checks every 5 minutes
+    }
+
     stages {
-        stage('Clone Repository') {
-            steps {
-                // Clone the Git repository (automatically done in Jenkins pipeline)
-                git branch: 'main', url: 'https://github.com/Silverstar2793/Speech-emotion-Recognition.git'
-            }
-        }
-        stage('Build Docker Image') {
+        stage('Checkout') {
             steps {
                 script {
-                    // Build Docker image
-                    sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .'
+                    // Checkout the repository code
+                    git url: "${REPO_URL}", branch: "${BRANCH}"
                 }
             }
         }
-        stage('Docker Login') {
+
+        stage('Build') {
             steps {
-                script {
-                    // Log in to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'silver2793', passwordVariable: 'Rajath@27')]) {
-                        sh 'echo "Rajath@27" | docker login -u "silver2793" --password-stdin'
-                    }
-                }
+                echo 'Building the project...'
+                // Add your build commands here, e.g., Maven, Gradle, npm, etc.
+                // Example for a Java project with Maven:
+                // sh 'mvn clean install'
+                // Or for a Node.js project:
+                // sh 'npm install'
             }
         }
-        stage('Push Docker Image') {
+
+        stage('Test') {
             steps {
-                script {
-                    // Push Docker image to Docker Hub
-                    sh 'docker push ${DOCKER_IMAGE}:${DOCKER_TAG}'
-                }
+                echo 'Running tests...'
+                // Add your test commands here, e.g., unit tests, integration tests, etc.
+                // Example for a Java project with Maven:
+                // sh 'mvn test'
+                // Or for a Node.js project:
+                // sh 'npm test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the project...'
+                // Add your deploy commands here, e.g., deploy to AWS, Docker, Kubernetes, etc.
+                // Example for a server deployment:
+                // sh 'scp target/*.jar user@server:/path/to/deploy'
             }
         }
     }
+
     post {
         always {
-            // Clean up Docker images locally to save space
-            sh 'docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true'
+            echo 'Cleaning up resources...'
+            // Add any cleanup steps here
+        }
+        success {
+            echo 'Build completed successfully!'
+        }
+        failure {
+            echo 'Build failed!'
         }
     }
 }
-
