@@ -1,9 +1,9 @@
 pipeline {
-    agent any  // Run on any available Jenkins agent
+    agent any
 
     environment {
-        // Define Python version or environment name if required
-        PYTHON_ENV = 'python3'  // You can use 'python' or 'python3' depending on your setup
+        // Define Python environment
+        PYTHON_ENV = 'python'  // Adjust based on your Python installation (e.g., 'python3')
         VIRTUAL_ENV = 'venv'  // Optional, for creating a virtual environment
     }
 
@@ -21,11 +21,11 @@ pipeline {
             steps {
                 script {
                     // Set up a virtual environment (optional)
-                    sh '''
-                    python3 -m venv $VIRTUAL_ENV
-                    source $VIRTUAL_ENV/bin/activate
+                    bat """
+                    ${PYTHON_ENV} -m venv ${VIRTUAL_ENV}
+                    call ${VIRTUAL_ENV}\\Scripts\\activate.bat
                     pip install --upgrade pip
-                    '''
+                    """
                 }
             }
         }
@@ -34,11 +34,10 @@ pipeline {
             steps {
                 script {
                     // Install the required dependencies from requirements.txt
-                    // Ensure you have a requirements.txt file in your repository
-                    sh '''
-                    source $VIRTUAL_ENV/bin/activate
+                    bat """
+                    call ${VIRTUAL_ENV}\\Scripts\\activate.bat
                     pip install -r requirements.txt
-                    '''
+                    """
                 }
             }
         }
@@ -47,10 +46,10 @@ pipeline {
             steps {
                 script {
                     // Run the app.py file
-                    sh '''
-                    source $VIRTUAL_ENV/bin/activate
+                    bat """
+                    call ${VIRTUAL_ENV}\\Scripts\\activate.bat
                     python app.py
-                    '''
+                    """
                 }
             }
         }
@@ -59,8 +58,8 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            // Deactivate and clean up the environment (optional)
-            sh 'deactivate || true'
+            // Optional: deactivate the virtual environment
+            bat 'if exist ${VIRTUAL_ENV}\\Scripts\\deactivate.bat call ${VIRTUAL_ENV}\\Scripts\\deactivate.bat'
         }
 
         success {
