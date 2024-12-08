@@ -21,7 +21,7 @@ pipeline {
                     ${PYTHON_EXECUTABLE} --version
                     ${PYTHON_EXECUTABLE} -m venv ${VIRTUAL_ENV}
                     call ${VIRTUAL_ENV}\\Scripts\\activate.bat
-                    pip install --upgrade pip
+                    pip3 install --upgrade pip
                     """
                 }
             }
@@ -32,7 +32,7 @@ pipeline {
                 script {
                     bat """
                     call ${VIRTUAL_ENV}\\Scripts\\activate.bat
-                    pip install -r requirements.txt
+                    pip3 install -r requirements.txt
                     """
                 }
             }
