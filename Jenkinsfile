@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        PYTHON_EXECUTABLE = 'python' // Replace with 'python3' or full path if necessary
-        VIRTUAL_ENV = 'venv'
+        PYTHON_EXECUTABLE = 'python' // Replace with 'python3' if required
+        VIRTUAL_ENV = 'venv' // Name of the virtual environment
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                // Checkout the code from Git repository
+                // Cloning the Git repository
                 git url: 'https://github.com/Silverstar2793/Speech-emotion-Recognition.git', branch: 'main'
             }
         }
@@ -18,10 +18,10 @@ pipeline {
             steps {
                 script {
                     bat """
-                    ${PYTHON_EXECUTABLE} --version
+                    ${PYTHON_EXECUTABLE} --version || echo 'Python not installed or not in PATH'
                     ${PYTHON_EXECUTABLE} -m venv ${VIRTUAL_ENV}
                     call ${VIRTUAL_ENV}\\Scripts\\activate.bat
-                    pip3 install --upgrade pip
+                    pip install --upgrade pip
                     """
                 }
             }
@@ -32,13 +32,13 @@ pipeline {
                 script {
                     bat """
                     call ${VIRTUAL_ENV}\\Scripts\\activate.bat
-                    pip3 install -r requirements.txt
+                    pip install -r requirements.txt
                     """
                 }
             }
         }
 
-        stage('Run app.py') {
+        stage('Run Application') {
             steps {
                 script {
                     bat """
@@ -52,16 +52,15 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up...'
+            echo 'Cleaning up virtual environment...'
             script {
                 bat """
                 if exist ${VIRTUAL_ENV}\\Scripts\\deactivate.bat call ${VIRTUAL_ENV}\\Scripts\\deactivate.bat
                 """
             }
         }
-
         failure {
-            echo 'Python application failed.'
+            echo 'Pipeline execution failed. Please check the logs for details.'
         }
     }
 }
