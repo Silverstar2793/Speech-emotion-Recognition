@@ -4,12 +4,27 @@ import sqlite3
 import librosa
 import numpy as np
 import pickle
+import boto3  # For AWS S3 interaction
+from dotenv import load_dotenv  # To manage environment variables
 
 # Initialize Flask app and configurations
 app = Flask(__name__, template_folder='templates')
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure upload directory exists
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Load environment variables
+load_dotenv()  # This loads variables from a .env file
+
+# AWS S3 Configuration
+S3_BUCKET = os.getenv("S3_BUCKET_NAME")
+S3_REGION = os.getenv("AWS_REGION")
+S3_CLIENT = boto3.client(
+    "s3",
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    region_name=S3_REGION
+)
 
 # Load pre-trained model
 MODEL_PATH = 'emotion_model.pkl'
@@ -30,7 +45,8 @@ def create_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             file_name TEXT,
             file_path TEXT,
-            predicted_emotion TEXT
+            predicted_emotion TEXT,
+            s3_url TEXT  -- Add a column to store the S3 file URL
         )
     ''')
     conn.commit()
@@ -71,9 +87,23 @@ def predict():
         if file.filename == '':
             return jsonify({"error": "No selected file"}), 400
 
-        # Save the uploaded file
+        # Save the uploaded file locally
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(file_path)
+
+        # Upload file to AWS S3
+        try:
+            s3_key = file.filename  # Use the filename as the key in S3
+            S3_CLIENT.upload_file(
+                Filename=file_path,
+                Bucket=S3_BUCKET,
+                Key=s3_key
+            )
+            # Generate the S3 file URL
+            s3_url = f"https://{S3_BUCKET}.s3.{S3_REGION}.amazonaws.com/{s3_key}"
+        except Exception as e:
+            print(f"Error uploading to S3: {e}")
+            return jsonify({"error": "Failed to upload file to cloud storage"}), 500
 
         # Extract features and predict emotion
         features = extract_features(file_path)
@@ -83,12 +113,12 @@ def predict():
         features = features.reshape(1, -1)  # Reshape for model input
         emotion = model.predict(features)[0]  # Predict emotion
 
-        # Store prediction in SQLite database
+        # Store prediction in SQLite database, including S3 URL
         try:
             conn = sqlite3.connect('uploads.db')
             cursor = conn.cursor()
             cursor.execute(
-                'INSERT INTO predictions (file_name, file_path, predicted_emotion) VALUES (?, ?, ?)',
+                'INSERT INTO predictions (file_name, file_path, predicted_emotion) VALUES (?, ?, ?, ?)',
                 (file.filename, file_path, emotion)
             )
             conn.commit()
@@ -101,7 +131,8 @@ def predict():
         return jsonify({
             "file_name": file.filename,
             "file_path": file_path,
-            "predicted_emotion": emotion
+            "predicted_emotion": emotion,
+             # Include the S3 URL in the response
         }), 200
 
     except Exception as e:
